@@ -2,7 +2,10 @@ const Upload = () => {
   return (
     <main className="px-4 py-16">
       <section>
-        <label className="cursor-pointer w-full flex items-center justify-center border-2 border-dashed border-gray-300 py-6 h-48 rounded-md text-gray-600 hover:border-orange-500 hover:text-orange-500">
+        <label
+          htmlFor="picture"
+          className="cursor-pointer w-full flex items-center justify-center border-2 border-dashed border-gray-300 py-6 h-48 rounded-md text-gray-600 hover:border-orange-500 hover:text-orange-500"
+        >
           <svg
             className="h-12 w-12"
             stroke="currentColor"
@@ -17,7 +20,7 @@ const Upload = () => {
               strokeLinejoin="round"
             />
           </svg>
-          <input type="file" className="hidden" />
+          <input id="picture" type="file" className="hidden" accept="image/*" />
         </label>
       </section>
       <section className="my-5">
