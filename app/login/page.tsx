@@ -1,14 +1,18 @@
 'use client';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { cls } from '@/_libs/utils';
 
+interface EnterForm {
+  email?: string;
+  phone?: string;
+}
 export default function Enter() {
   const [method, setMethod] = useState<'email' | 'phone'>('email');
+  const { register, handleSubmit, watch } = useForm<EnterForm>();
   const onEmailClick = () => setMethod('email');
   const onPhoneClick = () => setMethod('phone');
 
-  function cls(...classnames: string[]) {
-    return classnames.join(' ');
-  }
   return (
     <main className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center">Carrot Market: Login</h3>
