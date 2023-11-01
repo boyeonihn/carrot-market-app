@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import client from '@/_libs/client';
+import client from '@/_libs/server/client';
 
 export async function GET() {
   await client.user.create({

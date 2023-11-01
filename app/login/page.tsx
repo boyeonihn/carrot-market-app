@@ -4,12 +4,14 @@ import { useForm } from 'react-hook-form';
 import { cls } from '@/_libs/client/utils';
 import Input from '@/_components/input';
 import Button from '@/_components/button';
+import useMutation from '@/_libs/server/useMutation';
 
 interface LoginForm {
   email?: string;
   phone?: string;
 }
 export default function Login() {
+  const [enter, { loading, data, error }] = useMutation('/api/users/auth');
   const [method, setMethod] = useState<'email' | 'phone'>('email');
   const { register, handleSubmit, watch, reset } = useForm<LoginForm>();
   const onEmailClick = () => {
@@ -21,10 +23,12 @@ export default function Login() {
     setMethod('phone');
   };
 
-  console.log(watch());
-
   const onValid = (data: LoginForm) => {
     console.log(data);
+    fetch('/api/users/auth', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   };
   return (
     <main className="mt-16 px-4">
