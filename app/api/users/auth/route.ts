@@ -4,32 +4,24 @@ import client from '@/_libs/server/client';
 export const POST = async (req: Request) => {
   const res = await req.json();
   const { phone, email } = res;
+  const user = phone ? { phone } : email ? { email } : null;
 
-  const payload = phone ? { phone } : { email };
+  if (!user) return NextResponse.json({ status: 400 });
 
+  const payload = Math.floor(100000 + Math.random() * 900000) + '';
   console.log('paylod', payload);
-  const user = await client.user.upsert({
-    where: {
-      ...payload,
-    },
-    create: {
-      name: 'Anonymous',
-      ...payload,
-    },
-    update: {},
-  });
 
   const token = await client.token.create({
     data: {
-      payload: '1233334',
+      payload,
       user: {
         connectOrCreate: {
           where: {
-            ...payload,
+            ...user,
           },
           create: {
             name: 'Anonymous',
-            ...payload,
+            ...user,
           },
         },
       },
