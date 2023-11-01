@@ -1,16 +1,22 @@
 import Layout from '@/_components/layout';
+import Link from 'next/link';
+import FloatingButton from '@/_components/floating-button';
 
 const Stream = () => {
   return (
     <Layout title="라이브" hasTabBar>
       <main className="py-10 space-y-4 divide-y-2">
         {[1, 23, 4, 5, 6].map((_, i) => (
-          <div key={i} className="pt-4 px-4">
-            <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video"></div>
-            <h3 className="text-gray-700 text-lg mt-2">Let's Try potatoes</h3>
-          </div>
+          <Link key={i} href={`/live/${i}`}>
+            <a className="pt-4 block  px-4">
+              <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
+              <h1 className="text-2xl mt-2 font-bold text-gray-900">
+                Galaxy S50
+              </h1>
+            </a>
+          </Link>
         ))}
-        <button className="fixed hover:bg-orange-500 border-transparent transition-colors hover:cursor-pointer bottom-24 right-5 bg-orange-400 rounded-full p-3 shadow-xl text-white">
+        <FloatingButton href="/live/create">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -21,7 +27,7 @@ const Stream = () => {
               d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"
             />
           </svg>
-        </button>
+        </FloatingButton>
       </main>
     </Layout>
   );
