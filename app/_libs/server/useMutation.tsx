@@ -9,12 +9,14 @@ interface UseMutationState {
 type UseMutationResult = [(data?: any) => void, UseMutationState];
 
 export default function useMutation(url: string): UseMutationResult {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<undefined | any>(undefined);
-  const [error, setError] = useState<undefined | any>(undefined);
+  const [state, setState] = useState({
+    loading: false,
+    data: undefined,
+    error: undefined,
+  });
 
   async function mutationFn(data: any) {
-    setLoading(true);
+    setState((prev) => ({ ...prev, loading: true }));
 
     try {
       const res = await fetch(url, {
@@ -23,13 +25,13 @@ export default function useMutation(url: string): UseMutationResult {
       });
 
       const json = await res.json();
-      setData(json);
-    } catch (error) {
-      setError(error);
+      setState((prev) => ({ ...prev, data: json }));
+    } catch (error: any) {
+      setState((prev) => ({ ...prev, error }));
     } finally {
-      setLoading(false);
+      setState((prev) => ({ ...prev, loading: false }));
     }
   }
 
-  return [mutationFn, { loading, data, error }];
+  return [mutationFn, state];
 }
