@@ -23,13 +23,10 @@ export default function Login() {
     setMethod('phone');
   };
 
-  const onValid = (data: LoginForm) => {
-    console.log(data);
-    fetch('/api/users/auth', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+  const onValid = (validForm: LoginForm) => {
+    enter(validForm);
   };
+
   return (
     <main className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center">Carrot Market: Login</h3>
