@@ -5,14 +5,14 @@ export const POST = async (req: Request) => {
   const res = await req.json();
   const { phone, email } = res;
 
-  let user;
-  user = await client.user.upsert({
+  const payload = phone ? { phone: +phone } : { email };
+  const user = await client.user.upsert({
     where: {
-      phone: +phone,
+      ...payload,
     },
     create: {
-      phone: +phone,
       name: 'Anonymous',
+      ...payload,
     },
     update: {},
   });
