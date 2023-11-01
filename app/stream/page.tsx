@@ -7,13 +7,11 @@ const Stream = () => {
     <Layout title="라이브" hasTabBar>
       <main className="py-10 space-y-4 divide-y-2">
         {[1, 23, 4, 5, 6].map((_, i) => (
-          <Link key={i} href={`/live/${i}`}>
-            <a className="pt-4 block  px-4">
-              <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
-              <h1 className="text-2xl mt-2 font-bold text-gray-900">
-                Galaxy S50
-              </h1>
-            </a>
+          <Link key={i} href={`/live/${i}`} className="pt-4 block  px-4">
+            <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
+            <h1 className="text-2xl mt-2 font-bold text-gray-900">
+              Galaxy S50
+            </h1>
           </Link>
         ))}
         <FloatingButton href="/live/create">
