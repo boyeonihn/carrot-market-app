@@ -1,4 +1,4 @@
-const Live = () => {
+const Stream = () => {
   return (
     <main className="py-10 space-y-4 divide-y-2">
       {[1, 23, 4, 5, 6].map((_, i) => (
@@ -23,4 +23,4 @@ const Live = () => {
   );
 };
 
-export default Live;
+export default Stream;
