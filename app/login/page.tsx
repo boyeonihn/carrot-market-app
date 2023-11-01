@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { cls } from '@/_libs/utils';
+import { cls } from '@/_libs/client/utils';
 import Input from '@/_components/input';
 import Button from '@/_components/button';
 

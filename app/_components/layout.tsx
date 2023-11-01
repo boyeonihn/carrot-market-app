@@ -1,5 +1,5 @@
 'use client';
-import { cls } from '@/_libs/utils';
+import { cls } from '@/_libs/client/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
