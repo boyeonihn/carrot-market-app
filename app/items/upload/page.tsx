@@ -1,6 +1,6 @@
 const Upload = () => {
   return (
-    <main className="px-4 py-16">
+    <main className="px-4 py-16 space-y-5">
       <section>
         <label
           htmlFor="picture"
@@ -23,7 +23,23 @@ const Upload = () => {
           <input id="picture" type="file" className="hidden" accept="image/*" />
         </label>
       </section>
-      <section className="my-5">
+      <section>
+        <label
+          htmlFor="name"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Name
+        </label>
+        <div className="rounded-md shadow-sm relative flex items-center">
+          <input
+            id="name"
+            type="text"
+            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+            placeholder="Name of Item"
+          />
+        </div>
+      </section>
+      <section>
         <label
           htmlFor="price"
           className="mb-1 block text-sm font-medium text-gray-700"
