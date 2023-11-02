@@ -1,6 +1,7 @@
 import twilio from 'twilio';
 import { NextResponse } from 'next/server';
 import client from '@/_libs/server/client';
+import sendEmail from '@/_libs/server/nodemailerClient';
 
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 export const POST = async (req: Request) => {
@@ -10,12 +11,11 @@ export const POST = async (req: Request) => {
 
   if (!user) return NextResponse.json({ status: 400 });
 
-  const payload = Math.floor(100000 + Math.random() * 900000) + '';
-  console.log('paylod', payload);
+  const tokenPayload = Math.floor(100000 + Math.random() * 900000) + '';
 
   const token = await client.token.create({
     data: {
-      payload,
+      payload: tokenPayload,
       user: {
         connectOrCreate: {
           where: {
@@ -36,10 +36,13 @@ export const POST = async (req: Request) => {
     const message = await twilioClient.messages.create({
       messagingServiceSid: process.env.TWILIO_MSID,
       to: process.env.MY_PHONE!,
-      body: `Your login token is ${payload}`,
+      body: `Your login token is ${tokenPayload}`,
     });
 
     console.log(message);
+  } else if (email) {
+    sendEmail(email, tokenPayload);
   }
-  return NextResponse.json({ res, message: 'ok' });
+
+  return NextResponse.json({ ok: true }, { status: 200 });
 };
