@@ -2,6 +2,8 @@ import twilio from 'twilio';
 import { NextResponse } from 'next/server';
 import client from '@/_libs/server/client';
 import sendEmail from '@/_libs/server/nodemailerClient';
+import { sealData } from 'iron-session';
+import { cookies } from 'next/headers';
 
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 export const POST = async (req: Request) => {
@@ -33,16 +35,21 @@ export const POST = async (req: Request) => {
   console.log('token', token);
 
   if (phone) {
-    const message = await twilioClient.messages.create({
-      messagingServiceSid: process.env.TWILIO_MSID,
-      to: process.env.MY_PHONE!,
-      body: `Your login token is ${tokenPayload}`,
-    });
-
-    console.log(message);
+    // const message = await twilioClient.messages.create({
+    //   messagingServiceSid: process.env.TWILIO_MSID,
+    //   to: process.env.MY_PHONE!,
+    //   body: `Your login token is ${tokenPayload}`,
+    // });
+    // console.log(message);
   } else if (email) {
-    sendEmail(email, tokenPayload);
+    // sendEmail(email, tokenPayload);
   }
+  const userObj = await client.user.findUnique({ where: user });
+  const encryptedSession = await sealData(JSON.stringify(userObj?.id), {
+    password: process.env.COOKIE_PW!,
+  });
+  console.log(encryptedSession);
+  cookies().set('auth', encryptedSession);
 
   return NextResponse.json({ ok: true }, { status: 200 });
 };
