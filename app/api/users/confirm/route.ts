@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-
 import {
   readCookieFromStorageServerAction,
   submitCookieToStorageServerAction,
@@ -10,11 +9,9 @@ import { unsealData } from 'iron-session';
 
 export const POST = async (req: NextRequest) => {
   const { token } = await req.json();
-  console.log('#### confirming whether token exists in cookies', { token });
 
   // 세션 있는지 확인
   const oldCookieFromStorage = await readCookieFromStorageServerAction();
-  console.log({ oldCookieFromStorage });
 
   // find token in db
   const foundToken = await client.token.findUnique({
@@ -23,7 +20,6 @@ export const POST = async (req: NextRequest) => {
     },
   });
 
-  console.log('foundtoken', foundToken);
   // 토큰 없을 시 return
   if (!foundToken) return NextResponse.json({ status: 404 });
 
@@ -36,7 +32,6 @@ export const POST = async (req: NextRequest) => {
     password: process.env.COOKIE_PW as string,
   });
 
-  console.log({ userIdCookieDecrypt });
   const userMatchesToken = userId === +userIdCookieDecrypt;
 
   if (!userMatchesToken) {
