@@ -1,6 +1,6 @@
 import twilio from 'twilio';
 import { NextResponse } from 'next/server';
-import client from '@/_libs/server/client';
+import client from '@/_libs/server/prismaClient';
 import sendEmail from '@/_libs/server/nodemailerClient';
 import { sealData } from 'iron-session';
 import { cookies } from 'next/headers';

@@ -3,9 +3,7 @@ import {
   readCookieFromStorageServerAction,
   submitCookieToStorageServerAction,
 } from '@/_libs/server/serverActions';
-import client from '@/_libs/server/client';
-import { cookies } from 'next/headers';
-import { unsealData } from 'iron-session';
+import client from '@/_libs/server/prismaClient';
 
 export const POST = async (req: NextRequest) => {
   const { token } = await req.json();

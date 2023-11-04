@@ -1,5 +1,5 @@
 import { readCookieFromStorageServerAction } from '@/_libs/server/serverActions';
-import client from '@/_libs/server/client';
+import client from '@/_libs/server/prismaClient';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const GET = async (req: NextRequest) => {
