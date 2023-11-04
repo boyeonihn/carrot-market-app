@@ -44,11 +44,10 @@ export const POST = async (req: Request) => {
   } else if (email) {
     // sendEmail(email, tokenPayload);
   }
-  const userObj = await client.user.findUnique({ where: user });
-  const encryptedSession = await sealData(JSON.stringify(userObj?.id), {
+  const encryptedSession = await sealData(JSON.stringify(token.userId), {
     password: process.env.COOKIE_PW!,
   });
-  console.log(encryptedSession);
+  console.log({ encryptedSession }, `userId is ${token.userId}`);
   cookies().set('auth', encryptedSession);
 
   return NextResponse.json({ ok: true }, { status: 200 });

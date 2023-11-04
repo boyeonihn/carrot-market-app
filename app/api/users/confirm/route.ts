@@ -1,55 +1,58 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+
+import {
+  readCookieFromStorageServerAction,
+  submitCookieToStorageServerAction,
+} from '@/_libs/server/serverActions';
 import client from '@/_libs/server/client';
-import { sealData, unsealData } from 'iron-session';
 import { cookies } from 'next/headers';
+import { unsealData } from 'iron-session';
 
-export const POST = async (req: Request) => {
-  const res = await req.json();
-  const { token } = res;
+export const POST = async (req: NextRequest) => {
+  const { token } = await req.json();
+  console.log('#### confirming whether token exists in cookies', { token });
 
-  // need to check whether token matches any of the tokens in the db
-  const tokenObj = await client.token.findUnique({
+  // 세션 있는지 확인
+  const oldCookieFromStorage = await readCookieFromStorageServerAction();
+  console.log({ oldCookieFromStorage });
+
+  // find token in db
+  const foundToken = await client.token.findUnique({
     where: {
       payload: token,
     },
   });
 
-  if (!tokenObj) {
-    console.log('cookie didnt exist');
-    return NextResponse.json({ ok: false }, { status: 401 });
-  }
+  console.log('foundtoken', foundToken);
+  // 토큰 없을 시 return
+  if (!foundToken) return NextResponse.json({ status: 404 });
 
-  const userId = tokenObj.userId;
+  // 토큰 존재 시
+  const { userId } = foundToken;
   const userIdCookie = cookies().get('auth')?.value;
-  const userIdEncrypted = await sealData(userId, {
-    password: process.env.COOKIE_PW!,
-  });
 
-  // checking if the token matches the user currently stored in cookie
+  if (!userIdCookie) return NextResponse.json({ status: 404 });
   const userIdCookieDecrypt = await unsealData(userIdCookie as string, {
     password: process.env.COOKIE_PW as string,
   });
 
-  console.log('decrypted userid cookie', { userIdCookieDecrypt, userId });
-  const userMatchesToken = userId == +userIdCookieDecrypt;
+  console.log({ userIdCookieDecrypt });
+  const userMatchesToken = userId === +userIdCookieDecrypt;
 
   if (!userMatchesToken) {
-    console.log('token didn match');
+    console.log('token didnt match');
     return NextResponse.json({ ok: false }, { status: 401 });
   }
-  console.log('user exists in cookie and token matches');
-  const sessionUser = client.user.findUnique({
+  console.log('user exists in cookiea nd token matches');
+  await submitCookieToStorageServerAction(foundToken.userId);
+  // const newCookieFromStorage = await readCookieFromStorageServerAction();
+
+  // 토큰의 userId와 같은 userId를 가진 token 전부 삭제
+  await client.token.deleteMany({
     where: {
-      id: userId,
+      userId: foundToken.userId,
     },
   });
 
-  const encryptedSession = await sealData(JSON.stringify(sessionUser), {
-    password: process.env.COOKIE_PW!,
-  });
-
-  console.log(encryptedSession, 'encrypted session info here');
-
-  cookies().set(process.env.COOKIE_AUTH!, encryptedSession);
   return NextResponse.json({ ok: true }, { status: 200 });
 };
