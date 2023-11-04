@@ -1,5 +1,6 @@
-import Layout from '@/_components/layout';
 import Link from 'next/link';
+import { Layout } from '@/_components/';
+
 const Chats = () => {
   return (
     <Layout hasTabBar title="채팅">

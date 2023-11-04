@@ -1,7 +1,4 @@
-import Layout from '@/_components/layout';
-import Button from '@/_components/button';
-import Input from '@/_components/input';
-import TextArea from '@/_components/textarea';
+import { Layout, Button, Input, TextArea } from '@/_components/';
 
 const Upload = () => {
   return (

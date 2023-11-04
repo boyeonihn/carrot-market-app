@@ -1,4 +1,4 @@
-import Layout from '@/_components/layout';
+import { Layout } from '@/_components';
 import Link from 'next/link';
 const Profile = () => {
   return (

@@ -1,13 +1,13 @@
-import Item from '@/_components/item';
-import Layout from '@/_components/layout';
-const Bought = () => {
+import { Layout, Item } from '@/_components';
+
+const Sold = () => {
   return (
-    <Layout canGoBack title="구매 목록">
+    <Layout title="판매내역" canGoBack>
       <main className="flex flex-col space-y-5 pb-10  divide-y">
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
           <Item
-            key={i}
             id={i}
+            key={i}
             title="iPhone 14"
             price={99}
             comments={1}
@@ -19,4 +19,4 @@ const Bought = () => {
   );
 };
 
-export default Bought;
+export default Sold;

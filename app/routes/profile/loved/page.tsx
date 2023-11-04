@@ -1,5 +1,5 @@
-import Layout from '@/_components/layout';
-import Item from '@/_components/item';
+import { Layout, Item } from '@/_components';
+
 const Loved = () => {
   return (
     <Layout canGoBack title="관심 목록">

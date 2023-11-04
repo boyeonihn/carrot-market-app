@@ -1,5 +1,4 @@
-import Layout from '@/_components/layout';
-import TextArea from '@/_components/textarea';
+import { Layout, TextArea } from '@/_components';
 
 const CommunityPostDetail = () => {
   return (

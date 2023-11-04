@@ -1,5 +1,4 @@
-import Layout from '@/_components/layout';
-import Message from '@/_components/message';
+import { Layout, Message } from '@/_components';
 
 const StreamDetail = () => {
   return (

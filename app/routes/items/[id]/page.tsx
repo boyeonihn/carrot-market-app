@@ -1,5 +1,4 @@
-import Layout from '@/_components/layout';
-import Button from '@/_components/button';
+import { Layout, Button } from '@/_components/';
 
 const ItemDetail = () => {
   return (

@@ -1,6 +1,5 @@
-import Layout from '@/_components/layout';
+import { Layout, FloatingButton } from '@/_components';
 import Link from 'next/link';
-import FloatingButton from '@/_components/floating-button';
 
 const Stream = () => {
   return (

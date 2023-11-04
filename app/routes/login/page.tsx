@@ -2,9 +2,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { cls } from '@/_libs/client/utils';
-import Input from '@/_components/input';
-import Button from '@/_components/button';
+import { Button, Input } from '@/_components';
 import useMutation from '@/_libs/server/useMutation';
+import { useRouter } from 'next/navigation';
 
 interface LoginForm {
   email?: string;
@@ -19,9 +19,8 @@ interface MutationResult {
 }
 
 export default function Login() {
-  const [enter, { loading, data, error }] =
+  const [login, { loading, data, error }] =
     useMutation<MutationResult>('/api/users/auth');
-
   const [
     confirmToken,
     { loading: tokenLoading, data: tokenData, error: tokenError },
@@ -31,25 +30,21 @@ export default function Login() {
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
 
-  const onEmailClick = () => {
+  const onClick = (loginMethod: 'email' | 'phone') => {
     reset();
-    setMethod('email');
-  };
-  const onPhoneClick = () => {
-    reset();
-    setMethod('phone');
+    setMethod(loginMethod);
   };
 
   const onValid = (validForm: LoginForm) => {
-    enter(validForm);
+    login(validForm);
   };
 
   const onTokenValid = (validForm: TokenForm) => {
-    console.log('token loading?');
     if (tokenLoading) return;
-    console.log('token not loading');
     confirmToken(validForm);
   };
+
+  const router = useRouter();
 
   return (
     <main className="mt-16 px-4">
@@ -73,7 +68,7 @@ export default function Login() {
           <>
             <div className="flex flex-col items-center">
               <h5 className="text-sm text-gray-500 font-medium">
-                Enter using:
+                Login using:
               </h5>
               <div className="grid w-full grid-cols-2 gap-16 mt-8">
                 <button
@@ -83,7 +78,7 @@ export default function Login() {
                       ? 'border-orange-500 font-bold text-orange-500'
                       : 'border-transparent text-gray-500'
                   )}
-                  onClick={onEmailClick}
+                  onClick={() => onClick('email')}
                 >
                   Email
                 </button>
@@ -94,7 +89,7 @@ export default function Login() {
                       ? 'border-orange-500 font-bold text-orange-500'
                       : 'border-transparent text-gray-500'
                   )}
-                  onClick={onPhoneClick}
+                  onClick={() => onClick('phone')}
                 >
                   Phone
                 </button>
@@ -135,7 +130,7 @@ export default function Login() {
             <div className="absolute w-full border-t border-gray-300" />
             <div className="relative -top-3 text-center">
               <span className="bg-white px-2 text-sm text-gray-500">
-                Or enter with
+                Or login with
               </span>
             </div>
           </div>
