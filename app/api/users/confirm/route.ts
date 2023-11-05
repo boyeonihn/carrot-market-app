@@ -4,6 +4,7 @@ import {
   submitCookieToStorageServerAction,
 } from '@/_libs/server/serverActions';
 import client from '@/_libs/server/prismaClient';
+import { confirmTokenUserMatch } from '@/_libs/server/session';
 
 export const POST = async (req: NextRequest) => {
   const { token } = await req.json();
@@ -23,14 +24,16 @@ export const POST = async (req: NextRequest) => {
 
   // 토큰 존재 시
   const { userId } = foundToken;
-  const userIdCookie = cookies().get('auth')?.value;
+  // check if userInfo matches the userId of Token
+  const userMatchesToken = confirmTokenUserMatch(userId);
+  // const userIdCookie = cookies().get('auth')?.value;
 
-  if (!userIdCookie) return NextResponse.json({ status: 404 });
-  const userIdCookieDecrypt = await unsealData(userIdCookie as string, {
-    password: process.env.COOKIE_PW as string,
-  });
+  // if (!userIdCookie) return NextResponse.json({ status: 404 });
+  // const userIdCookieDecrypt = await unsealData(userIdCookie as string, {
+  //   password: process.env.COOKIE_PW as string,
+  // });
 
-  const userMatchesToken = userId === +userIdCookieDecrypt;
+  // const userMatchesToken = userId === +userIdCookieDecrypt;
 
   if (!userMatchesToken) {
     console.log('token didnt match');
@@ -38,7 +41,6 @@ export const POST = async (req: NextRequest) => {
   }
   console.log('user exists in cookiea nd token matches');
   await submitCookieToStorageServerAction(foundToken.userId);
-  // const newCookieFromStorage = await readCookieFromStorageServerAction();
 
   // 토큰의 userId와 같은 userId를 가진 token 전부 삭제
   await client.token.deleteMany({

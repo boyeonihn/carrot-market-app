@@ -3,6 +3,7 @@ import {
   getIronSession,
   IronSessionData,
   getServerActionIronSession,
+  unsealData,
 } from 'iron-session';
 
 import { cookies } from 'next/headers';
@@ -40,6 +41,17 @@ const getServerActionSession = async () => {
   return session;
 };
 
+const confirmTokenUserMatch = async (userId: number) => {
+  const userIdCookie = cookies().get('auth')?.value;
+  if (!userIdCookie) return false;
+
+  const userIdCookieDecrypt = await unsealData(userIdCookie as string, {
+    password: process.env.COOKIE_PW as string,
+  });
+
+  return userId === +userIdCookieDecrypt;
+};
+
 // const session = async () => {
 //   const cookieStore = cookies();
 //   const encryptedSession = cookieStore.get(process.env.COOKIE_AUTH!)?.value;
@@ -55,4 +67,4 @@ const getServerActionSession = async () => {
 
 // export default session;
 
-export { getSession, getServerActionSession };
+export { getSession, getServerActionSession, confirmTokenUserMatch };
