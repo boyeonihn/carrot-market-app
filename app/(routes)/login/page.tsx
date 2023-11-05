@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { cls } from '@/_libs/client/utils';
 import { Button, Input } from '@/_components';
@@ -29,6 +29,7 @@ export default function Login() {
   const { register, handleSubmit, watch, reset } = useForm<LoginForm>();
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
+  const router = useRouter();
 
   const onClick = (loginMethod: 'email' | 'phone') => {
     reset();
@@ -44,7 +45,11 @@ export default function Login() {
     confirmToken(validForm);
   };
 
-  const router = useRouter();
+  useEffect(() => {
+    if (tokenData?.ok) {
+      router.push('/');
+    }
+  }, [tokenData, router]);
 
   return (
     <main className="mt-16 px-4">
